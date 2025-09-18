@@ -1,0 +1,8 @@
+[package]
+name = "open_triangulation"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rand = "0.9.2"
+plotters = "0.3.7"
