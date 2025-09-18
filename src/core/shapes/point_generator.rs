@@ -1,5 +1,7 @@
 use std::f64::consts::PI;
 
+use rand::{Rng, RngCore};
+
 use crate::core::shapes::point::Point;
 
 pub struct PointGenerator {}
@@ -18,6 +20,29 @@ impl PointGenerator {
         }
 
         return points;
+    }
+
+    pub fn randon(width: usize) -> Vec<Point> {
+        let mut rng = rand::rng();
+
+        let mut point_list: Vec<Point> = Vec::with_capacity(width);
+
+        let w = 600.0;
+        let pad = w / 12.0;
+
+        for _ in 0..width {
+            // випадкова точка в межах padding
+            let rand_x = rng.random_range(pad..(w - pad));
+            let rand_y = rng.random_range(pad..(w - pad));
+
+            // додаємо в обидва вектори
+            point_list.push(Point {
+                x: rand_x,
+                y: rand_y,
+            });
+        }
+
+        return point_list;
     }
 
     pub fn heart(scale: f64) -> Vec<Point> {
