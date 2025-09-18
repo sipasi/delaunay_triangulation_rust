@@ -1,1 +1,2 @@
-pub mod plot_builder;
+pub mod plotly_builder;
+pub mod plotters_builder;
