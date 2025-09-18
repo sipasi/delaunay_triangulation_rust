@@ -36,6 +36,21 @@ impl Edge {
 
         return 0;
     }
+
+    pub fn approximate_eq(&self, other: &Self, epsilon: f64) -> bool {
+        self.start.approximate_eq(&other.start, epsilon)
+            && self.end.approximate_eq(&other.end, epsilon)
+            || self.start.approximate_eq(&other.end, epsilon)
+                && self.end.approximate_eq(&other.start, epsilon)
+    }
+
+    pub fn toggle_polygon_edge(polygon: &mut Vec<Edge>, edge: Edge, eps: f64) {
+        if let Some(pos) = polygon.iter().position(|e| e.approximate_eq(&edge, eps)) {
+            polygon.remove(pos);
+        } else {
+            polygon.push(edge);
+        }
+    }
 }
 
 impl PartialEq for Edge {

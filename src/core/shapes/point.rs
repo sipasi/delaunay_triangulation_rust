@@ -23,4 +23,9 @@ impl Point {
 
         return dx * dx + dy * dy;
     }
+
+    pub fn approximate_eq(&self, other: &Point, epsilon: f64) -> bool {
+        (self.x - other.x).abs() < epsilon && 
+        (self.y - other.y).abs() < epsilon
+    }
 }

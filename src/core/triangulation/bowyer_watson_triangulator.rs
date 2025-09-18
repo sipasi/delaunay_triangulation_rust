@@ -3,6 +3,7 @@ use std::collections::HashSet;
 use rand::seq::SliceRandom;
 
 use crate::core::{
+    math::constants,
     shapes::{edge::Edge, point::Point, triangle::Triangle},
     triangulation::circumable::Circumable,
 };
@@ -11,7 +12,7 @@ pub struct BowyerWatsonTriangulator {}
 
 impl BowyerWatsonTriangulator {
     pub fn compute(points: &[Point], need_shuffle: bool) -> Vec<Triangle> {
-        let super_triangle = Circumable::triangle(points);
+        let super_triangle = Circumable::super_triangle(points);
 
         let mut shuffled_points = points.to_vec();
         Self::shuffle_if_need(&mut shuffled_points, need_shuffle);
@@ -30,12 +31,10 @@ impl BowyerWatsonTriangulator {
             }
 
             // 3) find the polygon (boundary) of the hole by counting edges
-            let mut polygon: HashSet<Edge> = HashSet::new();
+            let mut polygon: Vec<Edge> = Vec::new();
             for bad in &bad_triangles {
                 for edge in bad.edges() {
-                    if !polygon.insert(edge.clone()) {
-                        polygon.remove(&edge);
-                    }
+                    Edge::toggle_polygon_edge(&mut polygon, edge, constants::EPSILON);
                 }
             }
 

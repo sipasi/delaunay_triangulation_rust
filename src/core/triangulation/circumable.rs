@@ -1,5 +1,7 @@
 use crate::core::{
-    math::constants, shapes::{circle::Circle, point::Point, triangle::Triangle}, triangulation::extreme_points::ExtremePoints
+    math::constants,
+    shapes::{circle::Circle, point::Point, triangle::Triangle},
+    triangulation::extreme_points::ExtremePoints,
 };
 
 pub struct Circumable {}
@@ -42,7 +44,7 @@ impl Circumable {
         };
     }
 
-    pub fn triangle(points: &[Point]) -> Triangle {
+    pub fn super_triangle(points: &[Point]) -> Triangle {
         let extreme = ExtremePoints::find(points);
 
         let width = extreme.horizontal_distance();
