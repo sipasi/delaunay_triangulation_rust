@@ -13,7 +13,7 @@ impl PointGenerator {
         for i in 0..width {
             for j in 0..width {
                 points.push(Point {
-                    x: (i + i + 10) as f64,
+                    x: i as f64,
                     y: j as f64,
                 });
             }
