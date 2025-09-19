@@ -17,6 +17,7 @@ impl PlotlyBuilder {
     pub fn triangles(
         triangles: &Vec<Triangle>,
         show_circumcircle: bool,
+        skip_big_circumcircle: bool,
     ) -> Result<(), Box<dyn std::error::Error>> {
         // Initialize a new Plot
         let mut plot = Plot::new();
@@ -31,8 +32,19 @@ impl PlotlyBuilder {
             Rgb::new(255, 159, 64),  // Yellow
         ];
 
+        let avg_radius = match show_circumcircle && skip_big_circumcircle {
+            true => {
+                triangles
+                    .iter()
+                    .map(|t| Circumable::circle(t).radius)
+                    .sum::<f64>()
+                    / triangles.len() as f64
+            }
+            false => 0.0,
+        };
+
         // Iterate over each triangle and add it to the plot
-        Self::fill_triangles(&mut plot, &colors, triangles, show_circumcircle);
+        Self::fill_triangles(&mut plot, &colors, triangles, show_circumcircle, avg_radius);
 
         // Define the layout of the plot
         let layout = Self::create_layout();
@@ -48,6 +60,7 @@ impl PlotlyBuilder {
         colors: &[Rgb],
         triangles: &Vec<Triangle>,
         show_circumcircle: bool,
+        avg_radius: f64,
     ) {
         for (i, t) in triangles.iter().enumerate() {
             // Define the vertices of the triangle
@@ -67,13 +80,24 @@ impl PlotlyBuilder {
             plot.add_trace(trace);
 
             if show_circumcircle {
-                Self::draw_circumcircle(plot, &t, i, color);
+                Self::draw_circumcircle(plot, &t, i, color, avg_radius);
             }
         }
     }
 
-    fn draw_circumcircle(plot: &mut Plot, triangle: &Triangle, triangle_index: usize, color: Rgb) {
+    fn draw_circumcircle(
+        plot: &mut Plot,
+        triangle: &Triangle,
+        triangle_index: usize,
+        color: Rgb,
+        avg_radius: f64,
+    ) {
         let circle = Circumable::circle(triangle);
+
+        if avg_radius != 0.0 && circle.radius > avg_radius {
+            return;
+        }
+
         if !circle.center.x.is_nan() && !circle.radius.is_infinite() {
             let steps = 100;
             let mut cx = Vec::with_capacity(steps + 1);
