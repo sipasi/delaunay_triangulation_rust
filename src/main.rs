@@ -6,23 +6,22 @@ mod core;
 use core::shapes::point::Point;
 
 use crate::core::plot::plotly_builder::PlotlyBuilder;
-use crate::core::plot::plotters_builder::PlottersBuilder;
 use crate::core::shapes::point_generator::PointGenerator;
 use crate::core::shapes::triangle::Triangle;
 use crate::core::triangulation::bowyer_watson_triangulator::BowyerWatsonTriangulator;
 
 fn main() {
-    let point_count: usize = 3;
+    let point_count: usize = 5;
 
-    let points: Vec<Point> = PointGenerator::square(point_count); // FPointGenerator::heart(1f64)
+    let points: Vec<Point> = PointGenerator::random(point_count);
 
     let triangles: Vec<Triangle> = BowyerWatsonTriangulator::compute(&points, false);
 
-    // let _ = PlottersBuilder::triangles(&triangles);
-    let _ = PlotlyBuilder::triangles(&triangles);
+    let show_circumcircle = true;
+    let _ = PlotlyBuilder::triangles(&triangles, show_circumcircle);
 
     println!(
-        "point count: {point_count} make triangles: {:?}",
+        "point count: {point_count}\ntriangles: {:?}",
         triangles.len()
     );
 }
