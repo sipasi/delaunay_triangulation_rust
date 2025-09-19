@@ -20,8 +20,6 @@ fn main() {
     let show_circumcircle = true;
     let _ = PlotlyBuilder::triangles(&triangles, show_circumcircle);
 
-    println!(
-        "point count: {point_count}\ntriangles: {:?}",
-        triangles.len()
-    );
+    println!("point count: {point_count}");
+    println!("triangles: {:?}", triangles.len());
 }
