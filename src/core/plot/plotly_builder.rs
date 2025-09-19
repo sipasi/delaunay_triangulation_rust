@@ -56,27 +56,25 @@ impl PlotlyBuilder {
             let x = vec![t.a.x, t.b.x, t.c.x, t.a.x];
             let y = vec![t.a.y, t.b.y, t.c.y, t.a.y];
 
+            let color = colors[i % colors.len()];
+
             // Create a Scatter trace for the triangle
             let trace = Scatter::new(x, y)
                 .mode(Mode::Lines)
                 .name(format!("T {}", i + 1))
-                .line(
-                    plotly::common::Line::new()
-                        .color(colors[i % colors.len()])
-                        .width(2.0),
-                )
+                .line(plotly::common::Line::new().color(color).width(2.0))
                 .fill(Fill::ToSelf);
 
             // Add the trace to the plot
             plot.add_trace(trace);
 
             if show_circumcircle {
-                Self::draw_circumcircle(plot, &t, i);
+                Self::draw_circumcircle(plot, &t, i, color);
             }
         }
     }
 
-    fn draw_circumcircle(plot: &mut Plot, triangle: &Triangle, triangle_index: usize) {
+    fn draw_circumcircle(plot: &mut Plot, triangle: &Triangle, triangle_index: usize, color: Rgb) {
         let circle = Circumable::circle(triangle);
         if !circle.center.x.is_nan() && !circle.radius.is_infinite() {
             let steps = 100;
@@ -94,7 +92,7 @@ impl PlotlyBuilder {
                 .name(format!("Circ {}", triangle_index + 1))
                 .line(
                     plotly::common::Line::new()
-                        .color("rgba(200,200,200,0.5)") // light gray, semi-transparent
+                        .color(color) // light gray, semi-transparent
                         .width(1.5),
                 );
 
