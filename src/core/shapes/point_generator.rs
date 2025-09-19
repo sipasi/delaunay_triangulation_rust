@@ -22,7 +22,7 @@ impl PointGenerator {
         return points;
     }
 
-    pub fn randon(width: usize) -> Vec<Point> {
+    pub fn random(width: usize) -> Vec<Point> {
         let mut rng = rand::rng();
 
         let mut point_list: Vec<Point> = Vec::with_capacity(width);

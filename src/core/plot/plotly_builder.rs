@@ -11,8 +11,6 @@ use plotly::{
     common::{Fill, Mode, Title},
     layout::{Axis, ColorAxis, themes::BuiltinTheme},
 };
-use plotters::style::Color;
-
 pub struct PlotlyBuilder {}
 
 impl PlotlyBuilder {
